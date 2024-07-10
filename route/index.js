@@ -1,5 +1,6 @@
 import { Router } from "express";//package.json type=module that by we were able to use import statement ES6
 import {config} from 'dotenv'//Loads environment variables from .env file
+import axios from "axios"
 config();
 const token = process.env.WHATSAPP_API_ACCESS_TOKEN;
 const mytoken = process.env.WEBHOOK_VERIFY_TOKEN;
