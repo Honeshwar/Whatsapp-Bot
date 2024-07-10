@@ -54,12 +54,67 @@ route.post("/webhook",(req,res)=>{ //i want some
                    method:"POST",
                    url:"https://graph.facebook.com/v20.0/"+phon_no_id+"/messages?access_token="+token,
                    data:{
-                       messaging_product:"whatsapp",
-                       to:from,
-                       text:{
-                           body:"Hi.. I'm Bot, your message is "+msg_body
-                       }
-                   },
+                    "messaging_product": "whatsapp",
+                    "recipient_type": "individual",
+                    to:from,
+                    "type": "interactive",
+                    "interactive": {
+                      "type": "list",
+                      "header": {
+                        "type": "text",
+                        "text": "Choose Shipping Option"
+                      },
+                      "body": {
+                        "text": "Which shipping option do you prefer?"
+                      },
+                      "footer": {
+                        "text": "Lucky Shrub: Your gateway to succulents™"
+                      },
+                      "action": {
+                        "button": "Shipping Options",
+                        "sections": [
+                          {
+                            "title": "I want it ASAP!",
+                            "rows": [
+                              {
+                                "id": "priority_express",
+                                "title": "Priority Mail Express",
+                                "description": "Next Day to 2 Days"
+                              },
+                              {
+                                "id": "priority_mail",
+                                "title": "Priority Mail",
+                                "description": "1–3 Days"
+                              }
+                            ]
+                          },
+                          {
+                            "title": "I can wait a bit",
+                            "rows": [
+                              {
+                                "id": "usps_ground_advantage",
+                                "title": "USPS Ground Advantage",
+                                "description": "2–5 Days"
+                              },
+                              {
+                                "id": "media_mail",
+                                "title": "Media Mail",
+                                "description": "2–8 Days"
+                              }
+                            ]
+                          }
+                        ]
+                      }
+                    }
+                  }
+                    ,
+                //    {
+                //        messaging_product:"whatsapp",
+                //        to:from,
+                //        text:{
+                //            body:"Hi.. I'm Bot, your message is "+msg_body
+                //        }
+                //    },
                    headers:{
                        "Content-Type":"application/json"
                    }
