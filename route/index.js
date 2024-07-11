@@ -101,11 +101,11 @@ route.post("/webhook", async (req, res) => {
           const stateName = msg_body || null;
           // body_param?.entry[0]?.changes[0]?.value?.messages[0]?.interactive
           //   ?.list_reply?.title || null;
-          user.state = stateName;
 
           const isValidStateOrUT = isStateOrUT(stateName);
 
           if (isValidStateOrUT) {
+            user.state = stateName;
             user.chat_status = "finished";
             await userRepo.save(user);
             //send membership card user
