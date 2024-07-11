@@ -54,10 +54,10 @@ function template2(phon_no_id, token, from) {
         type: "list",
         header: {
           type: "text",
-          text: "Select Your State",
+          text: "Select Your State or union territory",
         },
         body: {
-          text: "select your state from below list",
+          text: "select your state or union territory from below list",
         },
         footer: {
           text: "This is a BJP bot, answer in a single line.",
@@ -66,120 +66,64 @@ function template2(phon_no_id, token, from) {
           button: "States(28)",
           sections: [
             {
-              title: "Total States(28)",
+              title: "North",
               rows: [
-                {
-                  id: "state_1",
-                  title: "Andhra Pradesh",
-                },
-                {
-                  id: "state_2",
-                  title: "Arunachal Pradesh",
-                },
-                {
-                  id: "state_3",
-                  title: "Assam",
-                },
-                {
-                  id: "state_4",
-                  title: "Bihar",
-                },
-                {
-                  id: "state_5",
-                  title: "Chhattisgarh",
-                },
-                {
-                  id: "state_6",
-                  title: "Goa",
-                },
-                {
-                  id: "state_7",
-                  title: "Gujarat",
-                },
-                {
-                  id: "state_8",
-                  title: "Haryana",
-                },
-                {
-                  id: "state_9",
-                  title: "Himachal Pradesh",
-                },
-                {
-                  id: "state_10",
-                  title: "Jharkhand",
-                },
-                {
-                  id: "state_11",
-                  title: "Karnataka",
-                },
-                {
-                  id: "state_12",
-                  title: "Kerala",
-                },
-                {
-                  id: "state_13",
-                  title: "Madhya Pradesh",
-                },
-                {
-                  id: "state_14",
-                  title: "Maharashtra",
-                },
-                {
-                  id: "state_15",
-                  title: "Manipur",
-                },
-                {
-                  id: "state_16",
-                  title: "Meghalaya",
-                },
-                {
-                  id: "state_17",
-                  title: "Mizoram",
-                },
-                {
-                  id: "state_18",
-                  title: "Nagaland",
-                },
-                {
-                  id: "state_19",
-                  title: "Odisha",
-                },
-                {
-                  id: "state_20",
-                  title: "Punjab",
-                },
-                {
-                  id: "state_21",
-                  title: "Rajasthan",
-                },
-                {
-                  id: "state_22",
-                  title: "Sikkim",
-                },
-                {
-                  id: "state_23",
-                  title: "Tamil Nadu",
-                },
-                {
-                  id: "state_24",
-                  title: "Telangana",
-                },
-                {
-                  id: "state_25",
-                  title: "Tripura",
-                },
-                {
-                  id: "state_26",
-                  title: "Uttar Pradesh",
-                },
-                {
-                  id: "state_27",
-                  title: "Uttarakhand",
-                },
-                {
-                  id: "state_28",
-                  title: "West Bengal",
-                },
+                { id: "state_1", title: "Haryana" },
+                { id: "state_2", title: "Himachal Pradesh" },
+                { id: "state_3", title: "Punjab" },
+                { id: "state_4", title: "Uttarakhand" },
+                { id: "state_5", title: "Uttar Pradesh" },
+                { id: "state_6", title: "Jammu & Kashmir" },
+                { id: "state_28", title: "Sikkim" },
+              ],
+            },
+            {
+              title: "East",
+              rows: [
+                { id: "state_7", title: "Arunachal Pradesh" },
+                { id: "state_8", title: "Assam" },
+                { id: "state_9", title: "Bihar" },
+                { id: "state_10", title: "Jharkhand" },
+                { id: "state_11", title: "West Bengal" },
+                { id: "state_12", title: "Manipur" },
+                { id: "state_13", title: "Meghalaya" },
+                { id: "state_14", title: "Mizoram" },
+                { id: "state_15", title: "Nagaland" },
+                { id: "state_16", title: "Odisha" },
+              ],
+            },
+            {
+              title: "West",
+              rows: [
+                { id: "state_17", title: "Chhattisgarh" },
+                { id: "state_18", title: "Goa" },
+                { id: "state_19", title: "Gujarat" },
+                { id: "state_20", title: "Maharashtra" },
+                { id: "state_21", title: "Rajasthan" },
+                { id: "state_22", title: "Madhya Pradesh" },
+              ],
+            },
+            {
+              title: "South",
+              rows: [
+                { id: "state_23", title: "Andhra Pradesh" },
+                { id: "state_24", title: "Karnataka" },
+                { id: "state_25", title: "Kerala" },
+                { id: "state_26", title: "Tamil Nadu" },
+                { id: "state_27", title: "Telangana" },
+              ],
+            },
+            {
+              title: "Union Territories",
+              rows: [
+                { id: "ut_1", title: "Andaman and Nicobar Islands" },
+                { id: "ut_2", title: "Chandigarh" },
+                { id: "ut_3", title: "Dadra and Nagar Haveli and Daman & Diu" },
+                { id: "ut_4", title: "Delhi" },
+                { id: "ut_5", title: "Ladakh" },
+                { id: "ut_6", title: "Lakshadweep" },
+                { id: "ut_7", title: "Puducherry" },
+                { id: "ut_8", title: "Jammu and Kashmi" },
               ],
             },
           ],
@@ -207,7 +151,7 @@ function template3(phon_no_id, token, from) {
       type: "text",
       text: {
         preview_url: true,
-        body: "Now you become a member of BJP, this is your membership card: https://cms.cloudinary.vpsvc.com/image/upload/c_scale,dpr_auto,f_auto,q_auto:best,t_productPageHeroGalleryTransformation_v2,w_auto/India%20LOB/visiting-cards/Non-Tearable%20Visiting%20Cards/IN_Non-Tearable-Visiting-Cards_Hero-image_01",
+        body: "Now you become a member of BJP, this is your membership card: https://whatsapp-bot-63e4.onrender.com",
       },
     },
     headers: {

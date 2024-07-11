@@ -132,8 +132,50 @@ route.post("/webhook", async (req, res) => {
   // return;
 });
 
+import path from "path";
+
 route.get("/", (req, res) => {
-  res.status(200).send("hello this is webhook setup");
+  res.status(200).send(`<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Membership Card</title>
+     <link rel="icon" href="https://cdn.pixabay.com/photo/2024/07/07/22/30/volcano-8879779_640.jpg" type="image/jpg">
+    <meta property="og:title" content="Membership Card" />
+    <meta property="og:description" content="Membership Card" />
+    <meta
+      property="og:image"
+      content="https://cdn.pixabay.com/photo/2024/07/07/22/30/volcano-8879779_640.jpg"
+    />
+    <style>
+      * {
+        padding: 0;
+        margin: 0;
+        box-sizing: border-box;
+      }
+        body{
+        height:99vh;
+        background-color:black;
+        display:flex;
+        justifu=y-content:center;
+        align-items:center;
+        }
+        img{
+        object-fit:contain;
+        }
+    </style>
+  </head>
+  <body>
+    <img
+      width="100%"
+      height="100%"
+      src="https://cdn.pixabay.com/photo/2024/07/07/22/30/volcano-8879779_640.jpg"
+      alt="membership card"
+    />
+  </body>
+</html>
+`); //send("hello this is webhook setup");
 });
 
 // axios({
