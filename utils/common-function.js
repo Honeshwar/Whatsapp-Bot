@@ -14,7 +14,7 @@ function template1(phon_no_id, token, from, userName) {
       to: from,
       type: "template",
       template: {
-        name: "template1",
+        name: "template_name",
         language: {
           code: "en_US",
         },
@@ -31,12 +31,67 @@ function template1(phon_no_id, token, from, userName) {
         ],
       },
     },
+    // data: {
+    //   messaging_product: "whatsapp",
+    //   recipient_type: "individual",
+    //   to: from,
+    //   type: "template",
+    //   template: {
+    //     name: "template1",
+    //     language: {
+    //       code: "en_US",
+    //     },
+    //     components: [
+    //       {
+    //         type: "body",
+    //         parameters: [
+    //           {
+    //             type: "text",
+    //             text: userName,
+    //           },
+    //         ],
+    //       },
+    //     ],
+    //   },
+    // },
+    // data: {
+    //   messaging_product: "whatsapp",
+    //   recipient_type: "individual",
+    //   to: from,
+    //   type: "text",
+    //   text: {
+    //     body: `Hi *${userName}*,\n \n To Become a Member of BJP,\n Enter your name
+    //     `, //or\n to use Whatsapp registereed name(${userName}) enter NA`,
+    //   },
+    // },
     headers: {
       "Content-Type": "application/json",
     },
   });
 }
+function templateEnterStateName(phon_no_id, token, from) {
+  axios({
+    method: "POST",
+    url:
+      "https://graph.facebook.com/v20.0/" +
+      phon_no_id +
+      "/messages?access_token=" +
+      token,
+    data: {
+      messaging_product: "whatsapp",
+      recipient_type: "individual",
+      to: from,
+      type: "text",
+      text: {
+        body: "Enter your *state or union teritory* name.",
+      },
+    },
 
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
+}
 // function template2(phon_no_id, token, from) {
 //   axios({
 //     method: "POST",
@@ -92,7 +147,7 @@ function template3(phon_no_id, token, from) {
   });
 }
 
-function template4(phon_no_id, token, from, msg_body) {
+function templateChangeName(phon_no_id, token, from) {
   axios({
     method: "POST",
     url:
@@ -106,9 +161,7 @@ function template4(phon_no_id, token, from, msg_body) {
       to: from,
       type: "text",
       text: {
-        body:
-          msg_body +
-          " is not a correct state or union territory name, Please enter correct name.",
+        body: "Enter your *new* name.",
       },
     },
 
@@ -118,7 +171,38 @@ function template4(phon_no_id, token, from, msg_body) {
   });
 }
 
-export { template1, template3, template4, isStateOrUT };
+function wrongInput(phon_no_id, token, from, text) {
+  axios({
+    method: "POST",
+    url:
+      "https://graph.facebook.com/v20.0/" +
+      phon_no_id +
+      "/messages?access_token=" +
+      token,
+    data: {
+      messaging_product: "whatsapp",
+      recipient_type: "individual",
+      to: from,
+      type: "text",
+      text: {
+        body: text,
+      },
+    },
+
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
+}
+export {
+  template1,
+  templateEnterStateName,
+  template3,
+  isStateOrUT,
+  templateChangeName,
+  wrongInput,
+  isTextOnly,
+};
 
 const statesAndUTs = [
   "andhra pradesh",
@@ -162,6 +246,11 @@ const statesAndUTs = [
 
 function isStateOrUT(input) {
   return statesAndUTs.includes(input.toLowerCase());
+}
+function isTextOnly(input) {
+  // Use a regular expression to match only alphabetic characters and spaces
+  const regex = /^[A-Za-z ]+$/;
+  return regex.test(input);
 }
 
 /**data: {

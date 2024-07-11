@@ -2,9 +2,12 @@ import { Router } from "express"; //package.json type=module that by we were abl
 import { config } from "dotenv"; //Loads environment variables from .env file
 import {
   template1,
+  templateEnterStateName,
   template3,
-  template4,
   isStateOrUT,
+  templateChangeName,
+  wrongInput,
+  isTextOnly,
 } from "../utils/common-function.js";
 import { AppSource } from "../config/dbConfig.js";
 import User from "../model/user.js";
@@ -55,6 +58,11 @@ route.post("/webhook", async (req, res) => {
       let msg_body = body_param.entry[0].changes[0].value.messages[0].text.body;
       const userName =
         body_param.entry[0].changes[0].value.contacts[0].profile.name;
+      const wantToChangeName =
+        body_param?.entry[0]?.changes[0]?.value?.messages[0]?.button?.text ===
+        "it's look good"
+          ? false
+          : true;
 
       console.log("phone number " + phon_no_id);
       console.log("from " + from);
@@ -66,37 +74,59 @@ route.post("/webhook", async (req, res) => {
       let chat_status = "";
       if (!user) {
         //null
-        chat_status = "template1";
+        chat_status = "template-hello";
+      } else if (wantToChangeName && user.chat_status !== "finished") {
+        chat_status = "template-change-name";
       } else {
         chat_status = user.chat_status;
       }
 
       console.log("chat_status", chat_status, user);
       switch (chat_status) {
-        case "template1":
+        case "template-hello":
           //create user and store user mobile number,name, in db
           const newUser = {};
           newUser.mobile = Number(from);
-          newUser.name = userName;
-          newUser.chat_status = "template3";
+          // newUser.name = userName;
+          newUser.chat_status = "template-use-whatsapp-registered-name";
           await userRepo.save(newUser);
 
           // send welcome message to user
           template1(phon_no_id, token, from, userName);
           console.log("done ");
           break;
+        case "template-change-name":
+          chat_status = "template-update-name";
+          // send change name message to user
+          templateChangeName(phon_no_id, token, from);
+          console.log("done ");
+          break;
+        case "template-update-name":
+          //get name from use
 
-        // case "template2":
-        //   //get name from use
-        //   user.name = msg_body;
-        //   // user.chat_status = "template3";
-        //   await userRepo.save(user); //save entery in table using OOPS concept
+          if (isTextOnly(msg_body)) {
+            user.name = msg_body;
+            await userRepo.save(user); //save entery in table using OOPS concept
+            user.chat_status = "template-state";
+            //send select state message to user
+            templateEnterStateName(phon_no_id, token, from);
+            return;
+          }
 
-        //   //send select state message to user
-        //   template2(phon_no_id, token, from);
-        //   break;
+          wrongInput(phon_no_id, token, from, `Enter you *real* name`);
 
-        case "template3":
+          break;
+        case "template-use-whatsapp-registered-name":
+          //get name from use
+          user.name = userName;
+          await userRepo.save(user); //save entery in table using OOPS concept
+          user.chat_status = "template-state";
+
+          //send select state message to user
+          templateEnterStateName(phon_no_id, token, from);
+
+          break;
+        case "template-state":
           //save state name in db
           const stateName = msg_body || null;
           // body_param?.entry[0]?.changes[0]?.value?.messages[0]?.interactive
@@ -111,7 +141,12 @@ route.post("/webhook", async (req, res) => {
             //send membership card user
             template3(phon_no_id, token, from);
           } else {
-            template4(phon_no_id, token, from, msg_body);
+            wrongInput(
+              phon_no_id,
+              token,
+              from,
+              `*${msg_body}* is not a correct *state or union territory* name, \n \n Please enter *correct* name.`
+            );
           }
           break;
 
