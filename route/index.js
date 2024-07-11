@@ -57,15 +57,20 @@ route.post("/webhook", async (req, res) => {
       console.log("user name ", userName);
 
       const userRepo = AppSource.getRepository("User");
-      const user = await userRepo.find({ where: { mobile: from } });
+      const user = await userRepo.findOne({ where: { mobile: from } });
+      let chat_status = "";
       if (!user) {
         //null
         chat_status = "template1";
+      } else {
+        chat_status = user.chat_status;
       }
+
+      console.log("chat_status", chat_status, user);
       switch (chat_status) {
         case "template1":
           //create user and store user mobile number in db
-          const newUser = new User();
+          const newUser = {};
           newUser.mobile = Number(from);
           newUser.name = userName;
           newUser.chat_status = "template2";
@@ -73,6 +78,7 @@ route.post("/webhook", async (req, res) => {
 
           // send welcome message to user
           template1(phon_no_id, token, from, userName);
+          console.log("done ");
           break;
 
         case "template2":

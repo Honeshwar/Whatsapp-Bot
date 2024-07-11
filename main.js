@@ -5,9 +5,9 @@ import { AppSource } from "./config/dbConfig.js";
 const PORT = 8000;
 const app = express();
 
-app.use(express.urlencoded({ extended: false }));
+// app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
-app.use("/*", route);
+app.use("/", route);
 
 // app.listen(PORT,(err)=>{
 //     if(err)

@@ -5,27 +5,31 @@ const User = new EntitySchema({
   tableName: "user", // optional
   columns: {
     id: {
-      type: Number,
+      type: Number, //int(11)
       primary: true,
-      generated: true
+      generated: true,
     },
     mobile: {
-      type: Number,default:null
+      type: "bigint",
+      default: null,
     },
     name: {
-      type: String,default:null
+      type: String,
+      default: null,
     },
     state: {
-      type: String,default:null
+      type: String,
+      default: null,
     },
     membership_id: {
-      type: String, default:null
+      type: String,
+      default: null,
     },
     chat_status: {
       type: String,
-      default:"template1"
-    }
-  }
+      default: "template1",
+    },
+  },
 });
 
 export default User;
