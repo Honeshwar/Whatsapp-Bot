@@ -68,14 +68,22 @@ function template3(phon_no_id, token, from) {
       phon_no_id +
       "/messages?access_token=" +
       token,
+    // data: {
+    //   messaging_product: "whatsapp",
+    //   recipient_type: "individual",
+    //   to: from,
+    //   type: "text",
+    //   text: {
+    //     preview_url: true,
+    //     body: "Now you become a member of BJP, this is your membership card: https://whatsapp-bot-63e4.onrender.com",
+    //   },
+    // },
     data: {
       messaging_product: "whatsapp",
-      recipient_type: "individual",
       to: from,
-      type: "text",
-      text: {
-        preview_url: true,
-        body: "Now you become a member of BJP, this is your membership card: https://whatsapp-bot-63e4.onrender.com",
+      type: "image",
+      image: {
+        link: "https://cdn.pixabay.com/photo/2024/07/07/22/30/volcano-8879779_640.jpg",
       },
     },
     headers: {
@@ -84,7 +92,77 @@ function template3(phon_no_id, token, from) {
   });
 }
 
-export { template1, template3 };
+function template4(phon_no_id, token, from, msg_body) {
+  axios({
+    method: "POST",
+    url:
+      "https://graph.facebook.com/v20.0/" +
+      phon_no_id +
+      "/messages?access_token=" +
+      token,
+    data: {
+      messaging_product: "whatsapp",
+      recipient_type: "individual",
+      to: from,
+      type: "text",
+      text: {
+        body:
+          msg_body +
+          " is not a correct state or union territory name, Please enter correct name.",
+      },
+    },
+
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
+}
+
+export { template1, template3, template4, isStateOrUT };
+
+const statesAndUTs = [
+  "andhra pradesh",
+  "arunachal pradesh",
+  "assam",
+  "bihar",
+  "chhattisgarh",
+  "goa",
+  "gujarat",
+  "haryana",
+  "himachal pradesh",
+  "jharkhand",
+  "karnataka",
+  "kerala",
+  "madhya pradesh",
+  "maharashtra",
+  "manipur",
+  "meghalaya",
+  "mizoram",
+  "nagaland",
+  "odisha",
+  "punjab",
+  "rajasthan",
+  "sikkim",
+  "tamil nadu",
+  "telangana",
+  "tripura",
+  "uttar pradesh",
+  "uttarakhand",
+  "west bengal",
+  "andaman and nicobar islands",
+  "chandigarh",
+  "dadra and nagar haveli and daman and diu",
+  "delhi",
+  "lakshadweep",
+  "puducherry",
+  "ladakh",
+  "jammu and kashmir",
+  "jammu & kashmir",
+];
+
+function isStateOrUT(input) {
+  return statesAndUTs.includes(input.toLowerCase());
+}
 
 /**data: {
       messaging_product: "whatsapp",

@@ -1,6 +1,11 @@
 import { Router } from "express"; //package.json type=module that by we were able to use import statement ES6
 import { config } from "dotenv"; //Loads environment variables from .env file
-import { template1, template3 } from "../utils/common-function.js";
+import {
+  template1,
+  template3,
+  template4,
+  isStateOrUT,
+} from "../utils/common-function.js";
 import { AppSource } from "../config/dbConfig.js";
 import User from "../model/user.js";
 
@@ -97,11 +102,17 @@ route.post("/webhook", async (req, res) => {
           // body_param?.entry[0]?.changes[0]?.value?.messages[0]?.interactive
           //   ?.list_reply?.title || null;
           user.state = stateName;
-          user.chat_status = "finished";
-          await userRepo.save(user);
 
-          //send membership card user
-          template3(phon_no_id, token, from);
+          const isValidStateOrUT = isStateOrUT(stateName);
+
+          if (isValidStateOrUT) {
+            user.chat_status = "finished";
+            await userRepo.save(user);
+            //send membership card user
+            template3(phon_no_id, token, from);
+          } else {
+            template4(phon_no_id, token, from, msg_body);
+          }
           break;
 
         case "finished":
