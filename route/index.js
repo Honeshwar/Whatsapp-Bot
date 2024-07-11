@@ -1,6 +1,6 @@
 import { Router } from "express"; //package.json type=module that by we were able to use import statement ES6
 import { config } from "dotenv"; //Loads environment variables from .env file
-import { template1, template2, template3 } from "../utils/common-function.js";
+import { template1, template3 } from "../utils/common-function.js";
 import { AppSource } from "../config/dbConfig.js";
 import User from "../model/user.js";
 
@@ -69,11 +69,11 @@ route.post("/webhook", async (req, res) => {
       console.log("chat_status", chat_status, user);
       switch (chat_status) {
         case "template1":
-          //create user and store user mobile number in db
+          //create user and store user mobile number,name, in db
           const newUser = {};
           newUser.mobile = Number(from);
           newUser.name = userName;
-          newUser.chat_status = "template2";
+          newUser.chat_status = "template3";
           await userRepo.save(newUser);
 
           // send welcome message to user
@@ -81,15 +81,15 @@ route.post("/webhook", async (req, res) => {
           console.log("done ");
           break;
 
-        case "template2":
-          //get name from use
-          user.name = msg_body;
-          user.chat_status = "template3";
-          await userRepo.save(user); //save entery in table using OOPS concept
+        // case "template2":
+        //   //get name from use
+        //   user.name = msg_body;
+        //   // user.chat_status = "template3";
+        //   await userRepo.save(user); //save entery in table using OOPS concept
 
-          //send select state message to user
-          template2(phon_no_id, token, from);
-          break;
+        //   //send select state message to user
+        //   template2(phon_no_id, token, from);
+        //   break;
 
         case "template3":
           //save state name in db
@@ -131,8 +131,6 @@ route.post("/webhook", async (req, res) => {
   // res.sendStatus(200);
   // return;
 });
-
-import path from "path";
 
 route.get("/", (req, res) => {
   res.status(200).send(`<!DOCTYPE html>
