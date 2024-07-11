@@ -93,9 +93,9 @@ route.post("/webhook", async (req, res) => {
 
         case "template3":
           //save state name in db
-          const stateName =
-            body_param?.entry[0]?.changes[0]?.value?.messages[0]?.interactive
-              ?.list_reply?.title || null;
+          const stateName = msg_body || null;
+          // body_param?.entry[0]?.changes[0]?.value?.messages[0]?.interactive
+          //   ?.list_reply?.title || null;
           user.state = stateName;
           user.chat_status = "finished";
           await userRepo.save(user);
