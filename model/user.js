@@ -27,7 +27,7 @@ const User = new EntitySchema({
     },
     chat_status: {
       type: String,
-      default: "template1",
+      default: "template-hello",
     },
   },
 });

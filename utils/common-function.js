@@ -1,6 +1,53 @@
 import axios from "axios";
+const statesAndUTs = [
+  "andhra pradesh",
+  "arunachal pradesh",
+  "assam",
+  "bihar",
+  "chhattisgarh",
+  "goa",
+  "gujarat",
+  "haryana",
+  "himachal pradesh",
+  "jharkhand",
+  "karnataka",
+  "kerala",
+  "madhya pradesh",
+  "maharashtra",
+  "manipur",
+  "meghalaya",
+  "mizoram",
+  "nagaland",
+  "odisha",
+  "punjab",
+  "rajasthan",
+  "sikkim",
+  "tamil nadu",
+  "telangana",
+  "tripura",
+  "uttar pradesh",
+  "uttarakhand",
+  "west bengal",
+  "andaman and nicobar islands",
+  "chandigarh",
+  "dadra and nagar haveli and daman and diu",
+  "delhi",
+  "lakshadweep",
+  "puducherry",
+  "ladakh",
+  "jammu and kashmir",
+  "jammu & kashmir",
+];
 
-function template1(phon_no_id, token, from, userName) {
+function isStateOrUT(input) {
+  return statesAndUTs.includes(input.toLowerCase());
+}
+function isTextOnly(input) {
+  // Use a regular expression to match only alphabetic characters and spaces
+  const regex = /^[A-Za-z ]+$/;
+  return regex.test(input);
+}
+function templateHello(phon_no_id, token, from, userName) {
   axios({
     method: "POST",
     url:
@@ -69,53 +116,8 @@ function template1(phon_no_id, token, from, userName) {
     },
   });
 }
-function templateEnterStateName(phon_no_id, token, from) {
-  axios({
-    method: "POST",
-    url:
-      "https://graph.facebook.com/v20.0/" +
-      phon_no_id +
-      "/messages?access_token=" +
-      token,
-    data: {
-      messaging_product: "whatsapp",
-      recipient_type: "individual",
-      to: from,
-      type: "text",
-      text: {
-        body: "Enter your *state or union teritory* name.",
-      },
-    },
 
-    headers: {
-      "Content-Type": "application/json",
-    },
-  });
-}
-// function template2(phon_no_id, token, from) {
-//   axios({
-//     method: "POST",
-//     url:
-//       "https://graph.facebook.com/v20.0/" +
-//       phon_no_id +
-//       "/messages?access_token=" +
-//       token,
-//     data: {
-//       messaging_product: "whatsapp",
-//       recipient_type: "individual",
-//       to: from,
-//       type: "text",
-//       text: {
-//         body: "Enter your state or union teritory name?",
-//       },
-//     },
-//     headers: {
-//       "Content-Type": "application/json",
-//     },
-//   }).catch((err) => console.log("err at template2", err));
-// }
-
-function template3(phon_no_id, token, from) {
+function sendImage(phon_no_id, token, from) {
   axios({
     method: "POST",
     url:
@@ -146,32 +148,7 @@ function template3(phon_no_id, token, from) {
     },
   });
 }
-
-function templateChangeName(phon_no_id, token, from) {
-  axios({
-    method: "POST",
-    url:
-      "https://graph.facebook.com/v20.0/" +
-      phon_no_id +
-      "/messages?access_token=" +
-      token,
-    data: {
-      messaging_product: "whatsapp",
-      recipient_type: "individual",
-      to: from,
-      type: "text",
-      text: {
-        body: "Enter your *new* name.",
-      },
-    },
-
-    headers: {
-      "Content-Type": "application/json",
-    },
-  });
-}
-
-function wrongInput(phon_no_id, token, from, text) {
+function sendText(phon_no_id, token, from, text) {
   axios({
     method: "POST",
     url:
@@ -194,64 +171,76 @@ function wrongInput(phon_no_id, token, from, text) {
     },
   });
 }
-export {
-  template1,
-  templateEnterStateName,
-  template3,
-  isStateOrUT,
-  templateChangeName,
-  wrongInput,
-  isTextOnly,
-};
+export { templateHello, sendText, sendImage, isStateOrUT, isTextOnly };
 
-const statesAndUTs = [
-  "andhra pradesh",
-  "arunachal pradesh",
-  "assam",
-  "bihar",
-  "chhattisgarh",
-  "goa",
-  "gujarat",
-  "haryana",
-  "himachal pradesh",
-  "jharkhand",
-  "karnataka",
-  "kerala",
-  "madhya pradesh",
-  "maharashtra",
-  "manipur",
-  "meghalaya",
-  "mizoram",
-  "nagaland",
-  "odisha",
-  "punjab",
-  "rajasthan",
-  "sikkim",
-  "tamil nadu",
-  "telangana",
-  "tripura",
-  "uttar pradesh",
-  "uttarakhand",
-  "west bengal",
-  "andaman and nicobar islands",
-  "chandigarh",
-  "dadra and nagar haveli and daman and diu",
-  "delhi",
-  "lakshadweep",
-  "puducherry",
-  "ladakh",
-  "jammu and kashmir",
-  "jammu & kashmir",
-];
+// function templateEnterStateName(phon_no_id, token, from) {
+//   axios({
+//     method: "POST",
+//     url:
+//       "https://graph.facebook.com/v20.0/" +
+//       phon_no_id +
+//       "/messages?access_token=" +
+//       token,
+//     data: {
+//       messaging_product: "whatsapp",
+//       recipient_type: "individual",
+//       to: from,
+//       type: "text",
+//       text: {
+//         body: "Enter your *state or union teritory* name.",
+//       },
+//     },
 
-function isStateOrUT(input) {
-  return statesAndUTs.includes(input.toLowerCase());
-}
-function isTextOnly(input) {
-  // Use a regular expression to match only alphabetic characters and spaces
-  const regex = /^[A-Za-z ]+$/;
-  return regex.test(input);
-}
+//     headers: {
+//       "Content-Type": "application/json",
+//     },
+//   });
+// }
+// // function template2(phon_no_id, token, from) {
+// //   axios({
+// //     method: "POST",
+// //     url:
+// //       "https://graph.facebook.com/v20.0/" +
+// //       phon_no_id +
+// //       "/messages?access_token=" +
+// //       token,
+// //     data: {
+// //       messaging_product: "whatsapp",
+// //       recipient_type: "individual",
+// //       to: from,
+// //       type: "text",
+// //       text: {
+// //         body: "Enter your state or union teritory name?",
+// //       },
+// //     },
+// //     headers: {
+// //       "Content-Type": "application/json",
+// //     },
+// //   }).catch((err) => console.log("err at template2", err));
+// // }
+// function templateChangeName(phon_no_id, token, from) {
+//   axios({
+//     method: "POST",
+//     url:
+//       "https://graph.facebook.com/v20.0/" +
+//       phon_no_id +
+//       "/messages?access_token=" +
+//       token,
+//     data: {
+//       messaging_product: "whatsapp",
+//       recipient_type: "individual",
+//       to: from,
+//       type: "text",
+//       text: {
+//         body: "Enter your *new* name.",
+//       },
+//     },
+
+//     headers: {
+//       "Content-Type": "application/json",
+//     },
+//   });
+// }
 
 /**data: {
       messaging_product: "whatsapp",

@@ -1,12 +1,10 @@
 import { Router } from "express"; //package.json type=module that by we were able to use import statement ES6
 import { config } from "dotenv"; //Loads environment variables from .env file
 import {
-  template1,
-  templateEnterStateName,
-  template3,
+  templateHello,
+  sendText,
+  sendImage,
   isStateOrUT,
-  templateChangeName,
-  wrongInput,
   isTextOnly,
 } from "../utils/common-function.js";
 import { AppSource } from "../config/dbConfig.js";
@@ -58,19 +56,30 @@ route.post("/webhook", async (req, res) => {
       let msg_body = body_param.entry[0].changes[0].value.messages[0].text.body;
       const userName =
         body_param.entry[0].changes[0].value.contacts[0].profile.name;
-      let wantToChangeName =
-        body_param?.entry[0]?.changes[0]?.value?.messages[0]?.button?.text;
-
-      wantToChangeName = wantToChangeName
-        ? wantToChangeName === "it's look good"
-          ? false
-          : true
-        : false;
 
       console.log("phone number " + phon_no_id);
       console.log("from " + from);
       console.log("body param " + msg_body);
       console.log("user name ", userName);
+
+      //clear db
+      if (msg_body === "clear db 1") {
+        const u = await AppSource.createQueryBuilder()
+          .delete()
+          .from(User)
+          .where("mobile = :mobile", { mobile: from })
+          .execute();
+        console.log("delete user ", u);
+        sendText(
+          phon_no_id,
+          token,
+          from,
+          `successfully *deleted* your data from database`
+        );
+        return res
+          .status(200)
+          .send("successfully deleted your data from database");
+      }
 
       const userRepo = AppSource.getRepository("User");
       const user = await userRepo.findOne({ where: { mobile: from } });
@@ -78,8 +87,11 @@ route.post("/webhook", async (req, res) => {
       if (!user) {
         //null
         chat_status = "template-hello";
-      } else if (wantToChangeName && user.chat_status !== "finished") {
-        chat_status = "template-change-name";
+      } else if (
+        user.chat_status === "template-state" &&
+        msg_body === "it's look good"
+      ) {
+        chat_status = "template-update-name";
       } else {
         chat_status = user.chat_status;
       }
@@ -90,50 +102,44 @@ route.post("/webhook", async (req, res) => {
           //create user and store user mobile number,name, in db
           const newUser = {};
           newUser.mobile = Number(from);
-          // newUser.name = userName;
-          newUser.chat_status = "template-use-whatsapp-registered-name";
+          newUser.name = userName;
+          newUser.chat_status = "template-update-name";
           await userRepo.save(newUser);
 
           // send welcome message to user
-          template1(phon_no_id, token, from, userName);
+          templateHello(phon_no_id, token, from, userName);
           console.log("done ");
           break;
-        case "template-change-name":
-          chat_status = "template-update-name";
-          // send change name message to user
-          templateChangeName(phon_no_id, token, from);
-          console.log("done ");
-          break;
+
         case "template-update-name":
           //get name from use
-
-          if (isTextOnly(msg_body)) {
-            user.name = msg_body;
-            await userRepo.save(user); //save entery in table using OOPS concept
+          if (msg_body === "it's look good") {
             user.chat_status = "template-state";
+            await userRepo.save(user);
             //send select state message to user
-            templateEnterStateName(phon_no_id, token, from);
-            return;
-          }
-
-          wrongInput(phon_no_id, token, from, `Enter you *real* name`);
-
-          break;
-        case "template-use-whatsapp-registered-name":
-          //get name from use
-          user.name = userName;
-          await userRepo.save(user); //save entery in table using OOPS concept
-          user.chat_status = "template-state";
-
-          //send select state message to user
-          templateEnterStateName(phon_no_id, token, from);
+            sendText(
+              phon_no_id,
+              token,
+              from,
+              "Enter your *state or union teritory* name."
+            );
+          } else if (isTextOnly(msg_body)) {
+            user.name = msg_body;
+            user.chat_status = "template-state";
+            await userRepo.save(user); //save entery in table using OOPS concept
+            //send select state message to user
+            sendText(
+              phon_no_id,
+              token,
+              from,
+              "Enter your *state or union teritory* name."
+            );
+          } else sendText(phon_no_id, token, from, `Enter you *real* name`);
 
           break;
         case "template-state":
           //save state name in db
           const stateName = msg_body || null;
-          // body_param?.entry[0]?.changes[0]?.value?.messages[0]?.interactive
-          //   ?.list_reply?.title || null;
 
           const isValidStateOrUT = isStateOrUT(stateName);
 
@@ -142,9 +148,9 @@ route.post("/webhook", async (req, res) => {
             user.chat_status = "finished";
             await userRepo.save(user);
             //send membership card user
-            template3(phon_no_id, token, from);
+            sendImage(phon_no_id, token, from);
           } else {
-            wrongInput(
+            sendText(
               phon_no_id,
               token,
               from,
@@ -155,7 +161,7 @@ route.post("/webhook", async (req, res) => {
 
         case "finished":
           //send membership card user, all time once registerd
-          template3(phon_no_id, token, from);
+          sendImage(phon_no_id, token, from);
           break;
 
         default:
@@ -182,139 +188,5 @@ route.post("/webhook", async (req, res) => {
 });
 
 route.get("/", (req, res) => {
-  res.status(200).send(`<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Membership Card</title>
-     <link rel="icon" href="https://cdn.pixabay.com/photo/2024/07/07/22/30/volcano-8879779_640.jpg" type="image/jpg">
-    <meta property="og:title" content="Membership Card" />
-    <meta property="og:description" content="Membership Card" />
-    <meta
-      property="og:image"
-      content="https://cdn.pixabay.com/photo/2024/07/07/22/30/volcano-8879779_640.jpg"
-    />
-    <style>
-      * {
-        padding: 0;
-        margin: 0;
-        box-sizing: border-box;
-      }
-        body{
-        height:99vh;
-        background-color:black;
-        display:flex;
-        justifu=y-content:center;
-        align-items:center;
-        }
-        img{
-        object-fit:contain;
-        }
-    </style>
-  </head>
-  <body>
-    <img
-      width="100%"
-      height="100%"
-      src="https://cdn.pixabay.com/photo/2024/07/07/22/30/volcano-8879779_640.jpg"
-      alt="membership card"
-    />
-  </body>
-</html>
-`); //send("hello this is webhook setup");
+  res.status(200).send("hello this is webhook setup");
 });
-
-// axios({
-//   method:"POST",
-//   url:"https://graph.facebook.com/v20.0/"+phon_no_id+"/messages?access_token="+token,
-// //    data:{
-// //     "messaging_product": "whatsapp",
-// //     "recipient_type": "individual",
-// //     to:from,
-// //     "type": "interactive",
-// //     "interactive": {
-// //       "type": "list",
-// //       "header": {
-// //         "type": "text",
-// //         "text": "Choose Shipping Option"
-// //       },
-// //       "body": {
-// //         "text": "Which shipping option do you prefer?"
-// //       },
-// //       "footer": {
-// //         "text": "Lucky Shrub: Your gateway to succulents™"
-// //       },
-// //       "action": {
-// //         "button": "Shipping Options",
-// //         "sections": [
-// //           {
-// //             "title": "I want it ASAP!",
-// //             "rows": [
-// //               {
-// //                 "id": "priority_express",
-// //                 "title": "Priority Mail Express",
-// //                 "description": "Next Day to 2 Days"
-// //               },
-// //               {
-// //                 "id": "priority_mail",
-// //                 "title": "Priority Mail",
-// //                 "description": "1–3 Days"
-// //               }
-// //             ]
-// //           },
-// //           {
-// //             "title": "I can wait a bit",
-// //             "rows": [
-// //               {
-// //                 "id": "usps_ground_advantage",
-// //                 "title": "USPS Ground Advantage",
-// //                 "description": "2–5 Days"
-// //               },
-// //               {
-// //                 "id": "media_mail",
-// //                 "title": "Media Mail",
-// //                 "description": "2–8 Days"
-// //               }
-// //             ]
-// //           }
-// //         ]
-// //       }
-// //     }
-// //   }
-// data:{
-//    "messaging_product": "whatsapp",
-//    "recipient_type": "individual",
-//    to:from,
-//    "type": "template",
-//    "template": {
-//      "name": "template1",
-//      "language": {
-//        "code": "en_US"
-//      },
-//      "components": [
-//        {
-//          "type": "body",
-//          "parameters": [
-//            {
-//              "type": "text",
-//              "text": userName
-//            },
-//          ]
-//        }
-//      ]
-//    }
-//  }
-//    ,
-// //    {
-// //        messaging_product:"whatsapp",
-// //        to:from,
-// //        text:{
-// //            body:"Hi.. I'm Bot, your message is "+msg_body
-// //        }
-// //    },
-//   headers:{
-//       "Content-Type":"application/json"
-//   }
-
-// });
