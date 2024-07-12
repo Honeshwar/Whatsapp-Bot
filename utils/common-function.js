@@ -61,7 +61,7 @@ function templateHello(phon_no_id, token, from, userName) {
       to: from,
       type: "template",
       template: {
-        name: "template_name",
+        name: "template_hello",
         language: {
           code: "en_US",
         },
