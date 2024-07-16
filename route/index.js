@@ -95,7 +95,7 @@ route.post("/webhook", async (req, res) => {
           chat_status = "template-hello";
         } else if (
           user.chat_status === "template-state" &&
-          msg_body === "Take above name"
+          msg_body.toLowerCase() === "ok"
         ) {
           chat_status = "template-update-name";
         } else {
@@ -126,8 +126,8 @@ route.post("/webhook", async (req, res) => {
                   ?.text;
             }
             //get name from use
-            if (msg_body === "Take above name") {
-              console.log("Take above name");
+            if (msg_body.toLowerCase() === "ok") {
+              console.log("ok");
               user.chat_status = "template-state";
               await userRepo.save(user);
               //send select state message to user
