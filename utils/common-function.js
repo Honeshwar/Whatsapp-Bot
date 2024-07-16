@@ -61,7 +61,7 @@ async function templateHello(phon_no_id, token, from, userName) {
       to: from,
       type: "template",
       template: {
-        name: "template_hello",
+        name: "hello",
         language: {
           code: "en", //en_US
         },
