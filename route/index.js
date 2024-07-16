@@ -118,6 +118,13 @@ route.post("/webhook", async (req, res) => {
             break;
 
           case "template-update-name":
+            const msg_type =
+              body_param?.entry[0]?.changes[0]?.value?.messages[0]?.type;
+            if (msg_type === "button") {
+              msg_body =
+                body_param?.entry[0]?.changes[0]?.value?.messages[0]?.button
+                  ?.text;
+            }
             //get name from use
             if (msg_body === "Take above name") {
               console.log("Take above name");
