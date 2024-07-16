@@ -47,8 +47,8 @@ function isTextOnly(input) {
   const regex = /^[A-Za-z ]+$/;
   return regex.test(input);
 }
-function templateHello(phon_no_id, token, from, userName) {
-  axios({
+async function templateHello(phon_no_id, token, from, userName) {
+  const res = await axios({
     method: "POST",
     url:
       "https://graph.facebook.com/v20.0/" +
@@ -115,6 +115,8 @@ function templateHello(phon_no_id, token, from, userName) {
       "Content-Type": "application/json",
     },
   });
+
+  console.log("template hello a ", res.data);
 }
 
 function sendImage(phon_no_id, token, from) {
