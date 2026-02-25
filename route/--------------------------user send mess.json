@@ -1,0 +1,160 @@
+--------------------------user send message
+body_param {
+  object: 'whatsapp_business_account',
+  entry: [ { id: '327955700409541', changes: [Array] } ]
+}
+body_param stringify {
+  "object": "whatsapp_business_account",
+  "entry": [
+    {
+      "id": "327955700409541",
+      "changes": [
+        {
+          "value": {
+            "messaging_product": "whatsapp",
+            "metadata": {
+              "display_phone_number": "15556211903",
+              "phone_number_id": "338297932709038"
+            },
+            "contacts": [
+              {
+                "profile": {
+                  "name": "Honeshwar Thakur"
+                },
+                "wa_id": "918580538585"
+              }
+            ],
+            "messages": [
+              {
+                "from": "918580538585",
+                "id": "wamid.HBgMOTE4NTgwNTM4NTg1FQIAEhggMzk2QzdGMzI1QjQxQjlFNEFEQjU4ODQ4MTgzQTM3QTkA",
+                "timestamp": "1720597604",
+                "type": "image",
+                "image": {
+                  "mime_type": "image/jpeg",
+                  "sha256": "0UBpU0Pr3YWzv1ngtvEoZwyA72BYBGlKL5SGh+TVqaE=",
+                  "id": "3932502543701675"
+                }
+              }
+            ]
+          },
+          "field": "messages"
+        }
+      ]
+    }
+  ]
+}
+--------------------------
+
+
+
+
+body_param {
+  object: 'whatsapp_business_account',
+  entry: [ { id: '327955700409541', changes: [Array] } ]
+}
+body_param stringify {
+  "object": "whatsapp_business_account",
+  "entry": [
+    {
+      "id": "327955700409541",
+      "changes": [
+        {
+          "value": {
+            "messaging_product": "whatsapp",
+            "metadata": {
+              "display_phone_number": "15556211903",
+              "phone_number_id": "338297932709038"
+            },
+            "contacts": [
+              {
+                "profile": {
+                  "name": "Honeshwar Thakur"
+                },
+                "wa_id": "918580538585"
+              }
+            ],
+            "messages": [
+              {
+                "context": {
+                  "from": "15556211903",
+                  "id": "wamid.HBgMOTE4NTgwNTM4NTg1FQIAERgSOUUzQzhFRUUxMTYyRUYzMkFEAA=="
+                },
+                "from": "918580538585",
+                "id": "wamid.HBgMOTE4NTgwNTM4NTg1FQIAEhggMkIyMDMwRDAwMEM0MDRCODU3MkMyQjM5NkIxQzZBMEMA",
+                "timestamp": "1720675496",
+                "type": "interactive",
+                "interactive": {
+                  "type": "list_reply",
+                  "list_reply": {
+                    "id": "priority_mail",
+                    "title": "Priority Mail",
+                    "description": "1–3 Days"
+                  }
+                }
+              }
+            ]
+          },
+          "field": "messages"
+        }
+      ]
+    }
+  ]
+}
+--------------------------
+inside body param
+--------------------------
+body_param {
+  object: 'whatsapp_business_account',
+  entry: [ { id: '327955700409541', changes: [Array] } ]
+}
+body_param stringify {
+  "object": "whatsapp_business_account",
+  "entry": [
+    {
+      "id": "327955700409541",
+      "changes": [
+        {
+          "value": {
+            "messaging_product": "whatsapp",
+            "metadata": {
+              "display_phone_number": "15556211903",
+              "phone_number_id": "338297932709038"
+            },
+            "contacts": [
+              {
+                "profile": {
+                  "name": "Honeshwar Thakur"
+                },
+                "wa_id": "918580538585"
+              }
+            ],
+            "messages": [
+              {
+                "context": {
+                  "from": "15556211903",
+                  "id": "wamid.HBgMOTE4NTgwNTM4NTg1FQIAERgSOUUzQzhFRUUxMTYyRUYzMkFEAA=="
+                },
+                "from": "918580538585",
+                "id": "wamid.HBgMOTE4NTgwNTM4NTg1FQIAEhggMkIyMDMwRDAwMEM0MDRCODU3MkMyQjM5NkIxQzZBMEMA",
+                "timestamp": "1720675496",
+                "type": "interactive",
+                "interactive": {
+                  "type": "list_reply",
+                  "list_reply": {
+                    "id": "priority_mail",
+                    "title": "Priority Mail",
+                    "description": "1–3 Days"
+                  }
+                }
+              }
+            ]
+          },
+          "field": "messages"
+        }
+      ]
+    }
+  ]
+}
+--------------------------
+inside body param
